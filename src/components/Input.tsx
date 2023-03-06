@@ -6,13 +6,14 @@ import {
 
 type InputProps = {
     label: String,
+    type: 'number-pad' | 'default' 
 }
 
 const Input = (props: InputProps) => {
     return (
         <>
             <Text style={styles.labelTextInput}>{props.label}</Text>
-            <TextInput style={styles.textInput} />
+            <TextInput style={styles.textInput} keyboardType={props.type} />
         </>
     )
 }

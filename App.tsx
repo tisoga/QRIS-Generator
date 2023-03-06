@@ -5,15 +5,21 @@ import {
   TextInput,
   Button
 } from 'react-native'
-import { useRecoilValue } from 'recoil'
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import BouncyCheckBox from 'react-native-bouncy-checkbox'
 import ButtonWithText from './src/components/ButtonWithText'
 import { jenisTipStaticState, tipeQrisStaticState } from './src/recoil/atom'
 import Input from './src/components/Input'
+import { useState } from 'react'
+import { changeTipeQris, changeTipTipeQris } from './src/recoil/selector'
 
 const App = (): JSX.Element => {
   const tipeQrisStatic = useRecoilValue(tipeQrisStaticState)
   const jenisTipStatic = useRecoilValue(jenisTipStaticState)
+  const [activeButtonTipe, setTipeQris] = useRecoilState(changeTipeQris)
+  const [activeButtonTip, setTipTipeQris] = useRecoilState(changeTipTipeQris)
+  const [isChangeMerchantName, setChangeMerchantName] = useState<boolean>(false)
+
   return (
     <View style={{ backgroundColor: '#87ceeb', flex: 1 }}>
       <View style={styles.containerTitle}>
@@ -21,16 +27,29 @@ const App = (): JSX.Element => {
       </View>
       <View style={styles.containerMain}>
         <BouncyCheckBox
+          isChecked={isChangeMerchantName}
+          onPress={() => setChangeMerchantName(!isChangeMerchantName)}
           text='Ganti Nama Merchant'
           fillColor='green'
-          textStyle={{ textDecorationLine: 'none', color: 'black' }} />
+          textStyle={{ textDecorationLine: 'none', color: 'black' }}
+          disableBuiltInState />
         <View style={styles.containerSecond}>
-          <ButtonWithText title={tipeQrisStatic.title} buttons={tipeQrisStatic.buttons} />
-          <ButtonWithText title={jenisTipStatic.title} buttons={jenisTipStatic.buttons} />
-          <Input label={'Masukan Nama Merchant'} />
+          <ButtonWithText
+            title={tipeQrisStatic.title}
+            buttons={tipeQrisStatic.buttons}
+            changeState={setTipeQris}
+            activeButton={activeButtonTipe} />
+          <ButtonWithText
+            title={jenisTipStatic.title}
+            buttons={jenisTipStatic.buttons}
+            changeState={setTipTipeQris}
+            activeButton={activeButtonTip} />
+          {isChangeMerchantName &&
+            <Input label={'Masukan Nama Merchant'} type={'default'} />
+          }
           <View style={{ marginTop: 20 }}>
-            <Input label={'Masukan Harga'} />
-            <Input label={'Masukan Jumlah Tip'} />
+            <Input label={'Masukan Harga'} type={'number-pad'} />
+            <Input label={'Masukan Jumlah Tip'} type={'number-pad'} />
           </View>
         </View>
         <View style={{ marginTop: 10 }}>

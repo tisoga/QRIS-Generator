@@ -10,18 +10,31 @@ type ButtonProps = {
 }
 
 type SectionProps = {
-    title: String,
+    title: String
+    activeButton: String
     buttons: ButtonProps[]
+    changeState: Function
 }
 
 const ButtonWithText = (props: SectionProps): JSX.Element => {
+
+    const changeButtonState = (val: String):void => {
+        props.changeState(val)
+    }
+
     return (
         <>
             <Text style={styles.textH1}>{props.title}</Text>
             <View style={styles.buttonContainer}>
                 {props.buttons.map((item, index) => (
-                    <TouchableOpacity key={index} activeOpacity={0.7} style={styles.buttonMenu}>
-                        <Text style={styles.textButton}>{item.buttonText}</Text>
+                    <TouchableOpacity
+                        key={index}
+                        activeOpacity={0.7}
+                        style={props.activeButton === item.buttonText ? styles.buttonMenuClicked : styles.buttonMenu}
+                        onPress={() => changeButtonState(item.buttonText)}>
+                        <Text
+                            style={props.activeButton === item.buttonText ? styles.textButtonClicked : styles.textButton}
+                        >{item.buttonText}</Text>
                     </TouchableOpacity>
                 ))}
             </View>
@@ -38,9 +51,9 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     buttonContainer: {
-        flexDirection: 'row', 
-        gap: 10, 
-        justifyContent: 'space-evenly', 
+        flexDirection: 'row',
+        gap: 10,
+        justifyContent: 'space-evenly',
         flexWrap: 'wrap',
         marginVertical: 10
     },
@@ -50,7 +63,7 @@ const styles = StyleSheet.create({
     },
     textButtonClicked: {
         color: 'white',
-        textAlign: 'center'
+        textAlign: 'center',
     },
     buttonMenu: {
         backgroundColor: 'white',
