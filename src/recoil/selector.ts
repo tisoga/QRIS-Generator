@@ -17,7 +17,7 @@ export const changeTipeQris = selector({
         if(guardRecoilDefaultValue(val)) return
         const data = get(qrisTransactionState)
         const newData = {
-            ...data, tipeQris: val
+            ...data, tipeQris: val, price: 0
         }
         set(qrisTransactionState, newData)
     }
@@ -32,7 +32,7 @@ export const changeTipTipeQris = selector({
         if(guardRecoilDefaultValue(val)) return
         const data = get(qrisTransactionState)
         const newData = {
-            ...data, jenisTip: val
+            ...data, jenisTip: val, tip: 0
         }
         set(qrisTransactionState, newData)
     }
@@ -46,8 +46,9 @@ export const changePriceQris = selector({
     set: ({get, set}, val) => {
         if(guardRecoilDefaultValue(val)) return
         const data = get(qrisTransactionState)
+        const newPrice = Number(val)
         const newData = {
-            ...data, price: val
+            ...data, price: isNaN(newPrice) ? 0 : newPrice
         }
         set(qrisTransactionState, newData)
     }
@@ -61,8 +62,24 @@ export const changeTipQris = selector({
     set: ({get, set}, val) => {
         if(guardRecoilDefaultValue(val)) return
         const data = get(qrisTransactionState)
+        const newPrice = Number(val)
         const newData = {
-            ...data, tip: val
+            ...data, tip: isNaN(newPrice) ? 0 : newPrice
+        }
+        set(qrisTransactionState, newData)
+    }
+})
+
+export const changeMerchantName = selector({
+    key: 'changeMerchantName',
+    get: ({get}) => {
+        return get(qrisTransactionState).merchantName
+    },
+    set: ({get, set}, val) => {
+        if(guardRecoilDefaultValue(val)) return
+        const data = get(qrisTransactionState)
+        const newData = {
+            ...data, merchantName: val
         }
         set(qrisTransactionState, newData)
     }

@@ -8,17 +8,27 @@ import {
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import BouncyCheckBox from 'react-native-bouncy-checkbox'
 import ButtonWithText from './src/components/ButtonWithText'
-import { jenisTipStaticState, tipeQrisStaticState } from './src/recoil/atom'
+import { jenisTipStaticState, qrisTransactionState, tipeQrisStaticState } from './src/recoil/atom'
 import Input from './src/components/Input'
 import { useState } from 'react'
-import { changeTipeQris, changeTipTipeQris } from './src/recoil/selector'
+import { changeMerchantName, changePriceQris, changeTipeQris, changeTipQris, changeTipTipeQris } from './src/recoil/selector'
+import { makeTransaction } from './src/functions/fetching'
 
 const App = (): JSX.Element => {
   const tipeQrisStatic = useRecoilValue(tipeQrisStaticState)
   const jenisTipStatic = useRecoilValue(jenisTipStaticState)
+  const data = useRecoilValue(qrisTransactionState)
   const [activeButtonTipe, setTipeQris] = useRecoilState(changeTipeQris)
   const [activeButtonTip, setTipTipeQris] = useRecoilState(changeTipTipeQris)
-  const [isChangeMerchantName, setChangeMerchantName] = useState<boolean>(false)
+  const [isChangeMerchantName, setStatusMerchantName] = useState<boolean>(false)
+  const setMerchantName = useSetRecoilState(changeMerchantName)
+  const setPrice = useSetRecoilState(changePriceQris)
+  const setTip = useSetRecoilState(changeTipQris)
+
+  const changeCheckBoxStatus = ():void => {
+    setMerchantName('')
+    setStatusMerchantName(!isChangeMerchantName)
+  }
 
   return (
     <View style={{ backgroundColor: '#87ceeb', flex: 1 }}>
@@ -28,7 +38,7 @@ const App = (): JSX.Element => {
       <View style={styles.containerMain}>
         <BouncyCheckBox
           isChecked={isChangeMerchantName}
-          onPress={() => setChangeMerchantName(!isChangeMerchantName)}
+          onPress={changeCheckBoxStatus}
           text='Ganti Nama Merchant'
           fillColor='green'
           textStyle={{ textDecorationLine: 'none', color: 'black' }}
@@ -45,15 +55,19 @@ const App = (): JSX.Element => {
             changeState={setTipTipeQris}
             activeButton={activeButtonTip} />
           {isChangeMerchantName &&
-            <Input label={'Masukan Nama Merchant'} type={'default'} />
+            <Input label={'Masukan Nama Merchant'} type={'default'} setter={setMerchantName} value={data.merchantName} />
           }
           <View style={{ marginTop: 20 }}>
-            <Input label={'Masukan Harga'} type={'number-pad'} />
-            <Input label={'Masukan Jumlah Tip'} type={'number-pad'} />
+            {activeButtonTipe === 'Static' &&
+              <Input label={'Masukan Harga'} type={'number-pad'} setter={setPrice} value={String(data.price)} />
+            }
+            {activeButtonTip === 'Dynamic' ||
+              <Input label={`Masukan Jumlah ${activeButtonTip === 'Percentage' ? 'Persentase ' : ''}Tip`} type={'number-pad'} setter={setTip} value={String(data.tip)} />
+            }
           </View>
         </View>
         <View style={{ marginTop: 10 }}>
-          <Button title='Generate' />
+          <Button title={`Generate ${activeButtonTipe} QRIS`} onPress={() => makeTransaction(data)} />
         </View>
       </View>
     </View>
