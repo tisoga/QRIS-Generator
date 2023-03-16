@@ -1,6 +1,16 @@
 import { atom } from "recoil"
 
-const tipeQRIS = {
+type QrisMerchant = {
+    qrisType: string
+    acquirerName: string
+    merchantName: string
+    merchantCity: string
+    bussinessType: string
+    is_tip_activated: boolean
+    qrCode: string
+}
+
+const tipeQRISStaticText = {
     title: 'Pilih Tipe QRIS',
     buttons:
     [
@@ -9,7 +19,7 @@ const tipeQRIS = {
     ]
 }
 
-const jenisTip = {
+const jenisTipStaticText = {
     title: 'Jenis TIP / Biaya Layanan',
     buttons:
     [
@@ -30,15 +40,20 @@ const initialQrisTransaction = {
 
 export const tipeQrisStaticState = atom({
     key: 'tipeQrisStaticState',
-    default: tipeQRIS
+    default: tipeQRISStaticText
 })
 
 export const jenisTipStaticState = atom({
     key: 'jenisTipStaticState',
-    default: jenisTip
+    default: jenisTipStaticText
 })
 
 export const qrisTransactionState = atom({
     key: 'qrisTransactionState',
     default: initialQrisTransaction
+})
+
+export const savedQrisState = atom<QrisMerchant[]>({
+    key: 'savedQrisState',
+    default: []
 })

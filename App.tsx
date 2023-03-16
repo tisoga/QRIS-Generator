@@ -1,10 +1,12 @@
 import { NavigationContainer } from '@react-navigation/native'
+import { MerchantNavigator } from './src/navigation/Merchant'
 import { TransactionNavigator } from "./src/navigation/Transaction"
 
 const App = () => {
   return (
     <NavigationContainer>
-      <TransactionNavigator />
+      {/* <TransactionNavigator /> */}
+      <MerchantNavigator />
     </NavigationContainer>
   )
 }

@@ -9,7 +9,7 @@ import { TransactionParamList } from '../navigation/Transaction'
 
 type Props = NativeStackScreenProps<TransactionParamList, "QRPayment">
 
-const QRPayment = ({ navigation, route }: Props): JSX.Element => {
+const QRPayment = ({ route }: Props): JSX.Element => {
     const { merchantName, qrCode, price, tip } = route.params
     return (
         <View style={styles.container}>
