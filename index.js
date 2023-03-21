@@ -2,6 +2,7 @@
  * @format
  */
 
+import 'react-native-gesture-handler';
 import { AppRegistry } from 'react-native';
 import { RecoilRoot } from 'recoil'
 import App from './App';

@@ -1,15 +1,22 @@
 import { useState } from 'react'
-import { View, Text, StyleSheet, Button } from 'react-native'
+import { View, Text, StyleSheet, Button, Image, TouchableOpacity } from 'react-native'
 import type { NativeStackScreenProps } from '@react-navigation/native-stack'
 import BouncyCheckbox from 'react-native-bouncy-checkbox'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
-import { ButtonWithText, Input } from '../components'
+import { ButtonWithText, DrawerMenu, Input } from '../components'
 import { makeTransaction } from '../functions/fetching'
 import { jenisTipStaticState, qrisTransactionState, tipeQrisStaticState } from '../recoil/atom'
 import { changeMerchantName, changePriceQris, changeTipeQris, changeTipQris, changeTipTipeQris } from '../recoil/selector'
 import { TransactionParamList } from '../navigation/Transaction'
+import { CompositeScreenProps } from '@react-navigation/native'
+import { DrawerScreenProps } from '@react-navigation/drawer'
+import { RootParams } from '../navigation/RootNavigator'
 
-type Props = NativeStackScreenProps<TransactionParamList, 'Transaction'>
+
+type Props = CompositeScreenProps<
+    NativeStackScreenProps<TransactionParamList, 'Transaction'>,
+    DrawerScreenProps<RootParams, 'TransactionDrawer'>
+>;
 
 const Transaction = ({ navigation }: Props): JSX.Element => {
     const tipeQrisStatic = useRecoilValue(tipeQrisStaticState)
@@ -75,6 +82,7 @@ const Transaction = ({ navigation }: Props): JSX.Element => {
                     <Button title={`Generate ${activeButtonTipe} QRIS`} onPress={generateQRCode} />
                 </View>
             </View>
+            <DrawerMenu  onPress={() => navigation.toggleDrawer()} />
         </View>
     )
 }
@@ -113,7 +121,12 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
         marginBottom: 2
-    }
+    },
+    container: {
+        position: 'absolute',
+        top: 7,
+        left: 10,
+    },
 })
 
 export default Transaction

@@ -1,10 +1,16 @@
+import { CompositeScreenProps } from '@react-navigation/native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { View, Text, StyleSheet, TextInput, Button } from 'react-native'
 import BouncyCheckbox from 'react-native-bouncy-checkbox'
-import { TextDetail, TitleText } from '../components'
+import { DrawerMenu, TextDetail, TitleText } from '../components'
 import { MerchantParamList } from '../navigation/Merchant'
+import { DrawerScreenProps } from '@react-navigation/drawer'
+import { RootParams } from '../navigation/RootNavigator'
 
-type Props = NativeStackScreenProps<MerchantParamList, 'merchantDetail'>
+type Props = CompositeScreenProps<
+    NativeStackScreenProps<MerchantParamList, 'merchantDetail'>,
+    DrawerScreenProps<RootParams, 'TransactionDrawer'>
+>;
 
 const QrisMerchantDetail = ({ navigation }: Props): JSX.Element => {
     return (
@@ -39,6 +45,9 @@ const QrisMerchantDetail = ({ navigation }: Props): JSX.Element => {
                     <Button title='Delete Merchant' color={'red'} />
                 </View>
             </View>
+            <DrawerMenu 
+                onPress={() => navigation.toggleDrawer()}
+            />
         </View>
     )
 }
