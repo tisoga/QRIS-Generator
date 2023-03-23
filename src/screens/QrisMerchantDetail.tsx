@@ -2,27 +2,33 @@ import { CompositeScreenProps } from '@react-navigation/native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { View, Text, StyleSheet, TextInput, Button } from 'react-native'
 import BouncyCheckbox from 'react-native-bouncy-checkbox'
-import { DrawerMenu, TextDetail, TitleText } from '../components'
+import { TextDetail, TitleText } from '../components'
 import { MerchantParamList } from '../navigation/Merchant'
 import { DrawerScreenProps } from '@react-navigation/drawer'
 import { RootParams } from '../navigation/RootNavigator'
+import { useRecoilValue } from 'recoil'
+import { savedQrisState } from '../recoil/atom'
+import { convertBusinessCode } from '../functions'
 
 type Props = CompositeScreenProps<
     NativeStackScreenProps<MerchantParamList, 'merchantDetail'>,
     DrawerScreenProps<RootParams, 'TransactionDrawer'>
 >;
 
-const QrisMerchantDetail = ({ navigation }: Props): JSX.Element => {
+const QrisMerchantDetail = ({ navigation, route }: Props): JSX.Element => {
+    const { index } = route.params
+    const merchantDetail = useRecoilValue(savedQrisState)[index]
+
     return (
         <View style={{ backgroundColor: '#87ceeb', flex: 1 }}>
-            <TitleText title='Qris Merchant Detail' />
+            <TitleText title='Qris Merchant Detail' onPress={() => navigation.toggleDrawer()} />
             <View style={styles.containerMerchantDetail}>
-                <TextDetail label='Acquirer QRIS' value='TEst' />
-                <TextDetail label='Nama Merchant' value='TEst' />
-                <TextDetail label='Lokasi Kota Merchant' value='TEst' />
+                <TextDetail label='Acquirer QRIS' value={merchantDetail.acquirerName} />
+                <TextDetail label='Nama Merchant' value={merchantDetail.merchantName} />
+                <TextDetail label='Lokasi Kota Merchant' value={merchantDetail.merchantCity} />
                 <View style={styles.containerGroup}>
-                    <TextDetail label='Tipe Qris' value='QRIS Static' group />
-                    <TextDetail label='Tipe Bisnis' value='Usaha Menengah' group />
+                    <TextDetail label='Tipe Qris' value={`QRIS ${merchantDetail.qrisType.toUpperCase()}`} group />
+                    <TextDetail label='Tipe Bisnis' value={convertBusinessCode(merchantDetail.bussinessType)} group />
                 </View>
                 <View style={{ gap: 10, borderBottomWidth: 1, paddingBottom: 10 }}>
                     <Text style={styles.textFiturQris}>Fitur QRIS</Text>
@@ -31,6 +37,7 @@ const QrisMerchantDetail = ({ navigation }: Props): JSX.Element => {
                         <BouncyCheckbox
                             fillColor='green'
                             style={{ flex: 1 }}
+                            isChecked={merchantDetail.is_tip_activated}
                             disabled
                         />
                     </View>
@@ -45,9 +52,6 @@ const QrisMerchantDetail = ({ navigation }: Props): JSX.Element => {
                     <Button title='Delete Merchant' color={'red'} />
                 </View>
             </View>
-            <DrawerMenu 
-                onPress={() => navigation.toggleDrawer()}
-            />
         </View>
     )
 }

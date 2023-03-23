@@ -4,7 +4,7 @@ import { ListMerchantsScreen, QrisMerchantDetailScreen } from "../screens";
 
 export type MerchantParamList = {
     listMerchant: undefined;
-    merchantDetail: undefined;
+    merchantDetail: { index: number };
     // merchantDetail: {
     //     qrisType: string;
     //     acquirerName: string;

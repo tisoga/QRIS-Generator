@@ -10,7 +10,7 @@ type DataTransaction = {
     tip: number
 }
 
-export const makeTransaction = async (data: DataTransaction) => {
+const makeTransaction = async (data: DataTransaction) => {
     const url = main_url + '/qr/create_qris/'
     const sendData = {
         qr_code: data.qrCode,
@@ -32,3 +32,5 @@ export const makeTransaction = async (data: DataTransaction) => {
         console.log(err.response?.data)
       }
 } 
+
+export default makeTransaction

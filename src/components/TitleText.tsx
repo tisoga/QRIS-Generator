@@ -3,14 +3,17 @@ import {
     Text,
     StyleSheet
 } from 'react-native'
+import DrawerMenu from './DrawerMenu'
 
 type Props = {
-    title: string
+    title: string,
+    onPress: Function
 }
 
-const TitleText = ({ title }: Props): JSX.Element => {
+const TitleText = ({ title, onPress }: Props): JSX.Element => {
     return (
         <View style={styles.containerTitle}>
+            <DrawerMenu onPress={onPress} type={'merchant'} />
             <Text style={styles.textTitle}>{title}</Text>
         </View>
     )
@@ -25,7 +28,8 @@ const styles = StyleSheet.create({
     textTitle: {
         fontSize: 40,
         textAlign: 'center',
-        color: 'black'
+        color: 'black',
+        marginLeft: 10
     },
 })
 

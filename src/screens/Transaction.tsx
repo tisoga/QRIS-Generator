@@ -4,7 +4,7 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack'
 import BouncyCheckbox from 'react-native-bouncy-checkbox'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import { ButtonWithText, DrawerMenu, Input } from '../components'
-import { makeTransaction } from '../functions/fetching'
+import { makeTransaction } from '../functions'
 import { jenisTipStaticState, qrisTransactionState, tipeQrisStaticState } from '../recoil/atom'
 import { changeMerchantName, changePriceQris, changeTipeQris, changeTipQris, changeTipTipeQris } from '../recoil/selector'
 import { TransactionParamList } from '../navigation/Transaction'
@@ -45,7 +45,8 @@ const Transaction = ({ navigation }: Props): JSX.Element => {
     return (
         <View style={{ backgroundColor: '#87ceeb', flex: 1 }}>
             <View style={styles.containerTitle}>
-                <Text style={styles.textTitle}>Thiee Kitchen Bandung</Text>
+                <DrawerMenu onPress={() => navigation.toggleDrawer()} type={'transaction'} />
+                <Text style={styles.textTitle}>Thiee Kitchen Bandung Super</Text>
             </View>
             <View style={styles.containerMain}>
                 <BouncyCheckbox
@@ -82,7 +83,6 @@ const Transaction = ({ navigation }: Props): JSX.Element => {
                     <Button title={`Generate ${activeButtonTipe} QRIS`} onPress={generateQRCode} />
                 </View>
             </View>
-            <DrawerMenu  onPress={() => navigation.toggleDrawer()} />
         </View>
     )
 }
@@ -92,7 +92,9 @@ const styles = StyleSheet.create({
         marginTop: 5,
         alignItems: 'center',
         borderBottomWidth: 1,
-        borderBottomColor: 'red'
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        gap: 2
     },
     containerMain: {
         marginTop: 10,
@@ -109,7 +111,7 @@ const styles = StyleSheet.create({
         fontSize: 30,
         color: 'black',
         textAlign: 'center',
-        fontWeight: 'bold'
+        fontWeight: 'bold',
     },
     textInput: {
         borderWidth: 1,

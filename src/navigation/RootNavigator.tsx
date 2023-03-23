@@ -23,9 +23,8 @@ const Drawer = createDrawerNavigator<RootParams>()
 
 
 const CustomDrawer = (props: DrawerContentComponentProps): JSX.Element => {
-    // console.log(props.state.index)
     return (
-        <DrawerContentScrollView>
+        <DrawerContentScrollView contentContainerStyle={styles.drawerContent}>
             <Text style={styles.drawerTitleText}>Qris Generator</Text>
             <View style={styles.seperator} />
             <DrawerItemList {...props} />
@@ -34,6 +33,9 @@ const CustomDrawer = (props: DrawerContentComponentProps): JSX.Element => {
                 label={'Transaction'}
                 onPress={() => props.navigation.navigate('TransactionDrawer')}
             /> */}
+            <View style={styles.copyright}>
+                <Text style={styles.copyrightText}>© 2023 Ryan Afrizal. All Rights Reserved.</Text>
+            </View>
         </DrawerContentScrollView>
     )
 }
@@ -55,8 +57,19 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'center'
     },
+    drawerContent: {
+        flex: 1,
+        justifyContent: 'flex-start',
+    },
     seperator: {
         borderBottomWidth: 1,
         marginHorizontal: 25
+    },
+    copyright: { 
+        flex: 1 ,
+        justifyContent: 'flex-end',
+    },
+    copyrightText: {
+        textAlign: 'center'
     }
 })

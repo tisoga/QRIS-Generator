@@ -4,17 +4,19 @@ import {
     TouchableOpacity,
     StyleSheet
 } from 'react-native'
+import { convertBusinessCode } from '../functions'
 
 type Props = {
     merchantName: string,
     acquirer: string,
     tipeBisnis: string,
-    onPress: Function
+    onPress: Function,
+    index: number
 }
 
-const MerchantBox = ({ merchantName, acquirer, tipeBisnis, onPress }: Props): JSX.Element => {
+const MerchantBox = ({ merchantName, acquirer, tipeBisnis, onPress, index }: Props): JSX.Element => {
     return (
-        <TouchableOpacity style={styles.merchantBox} activeOpacity={0.5} onPress={() => onPress()}>
+        <TouchableOpacity style={styles.merchantBox} activeOpacity={0.5} onPress={() => onPress(index)}>
             <View style={styles.merchantNameContainer}>
                 <Text style={styles.merchantName}>{merchantName}</Text>
             </View>
@@ -23,7 +25,7 @@ const MerchantBox = ({ merchantName, acquirer, tipeBisnis, onPress }: Props): JS
             </View>
             <View style={styles.tipeBisnisContainer}>
                 <Text style={styles.tipeBisnisTextLeft}>Tipe Bisnis : </Text>
-                <Text style={styles.tipeBisnisTextRight}>{tipeBisnis}</Text>
+                <Text style={styles.tipeBisnisTextRight}>{convertBusinessCode(tipeBisnis)}</Text>
             </View>
         </TouchableOpacity>
     )
