@@ -37,6 +37,10 @@ const ListMerchants = ({ navigation }: Props): JSX.Element => {
         })
     }
 
+    const goToAddMerchant = () => {
+        navigation.navigate('addMerchant')
+    }
+
     return (
         <View style={{ backgroundColor: '#87ceeb', flex: 1, gap: 10 }}>
             <TitleText title='List Merchants' onPress={() => navigation.toggleDrawer()} />
@@ -50,7 +54,7 @@ const ListMerchants = ({ navigation }: Props): JSX.Element => {
                 ListEmptyComponent={EmptyMerchantMessage}
             />
             <View>
-                <Button title='Add New Merchant' />
+                <Button title='Add New Merchant' onPress={goToAddMerchant} />
             </View>
         </View>
     )

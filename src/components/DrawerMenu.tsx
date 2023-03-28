@@ -1,4 +1,5 @@
 import { TouchableOpacity, StyleSheet, Image } from "react-native"
+import { toggleDrawerIcon } from "../assets"
 
 type Props = {
     onPress: Function
@@ -17,7 +18,7 @@ const DrawerMenu = ({ onPress, type }: Props): JSX.Element => {
             onPress={toggleDrawer}
             style={type === 'merchant' ? styles.containerMerchant : styles.containerTransaction }>
             <Image
-                source={require('../assets/toggle-drawer-icon.png')}
+                source={toggleDrawerIcon}
                 style={{ width: 30, height: 30 }} />
         </TouchableOpacity>
     )

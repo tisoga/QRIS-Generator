@@ -1,15 +1,20 @@
 import { atom } from "recoil"
 
-type QrisMerchant = {
-    qrisType: string
-    acquirerName: string
+interface QrisTransaction {
+    qrCode: string
     merchantName: string
+    qrisType: string
+    jenisTip?: string
+    price?: number
+    tip?: number
+}
+
+interface QrisMerchant extends QrisTransaction {
+    acquirerName: string
     merchantCity: string
     bussinessType: string
     is_tip_activated: boolean
-    qrCode: string
 }
-
 const tipeQRISStaticText = {
     title: 'Pilih Tipe QRIS',
     buttons:
@@ -29,10 +34,10 @@ const jenisTipStaticText = {
         ]
 }
 
-const initialQrisTransaction = {
+const initialQrisTransaction: QrisTransaction = {
     qrCode: '00020101021126660014ID.LINKAJA.WWW011893600911002164800102152009170916480010303UME51450015ID.OR.GPNQR.WWW02150000000000000000303UME520454995802ID5903KAI6009Indonesia61051532562210117ESP1663719323KBQH53033606304',
     merchantName: '',
-    tipeQris: 'Dynamic',
+    qrisType: 'Dynamic',
     jenisTip: 'Dynamic',
     price: 0,
     tip: 0

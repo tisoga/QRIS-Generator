@@ -11,7 +11,7 @@ export const guardRecoilDefaultValue = (
 export const changeTipeQris = selector({
     key: 'changeTipeQris',
     get: ({ get }) => {
-        return get(qrisTransactionState).tipeQris
+        return get(qrisTransactionState).qrisType
     },
     set: ({ get, set }, val) => {
         if(guardRecoilDefaultValue(val)) return
@@ -26,13 +26,13 @@ export const changeTipeQris = selector({
 export const changeTipTipeQris = selector({
     key: 'changeTipTipeQris',
     get: ({ get }) => {
-        return get(qrisTransactionState).jenisTip
+        return get(qrisTransactionState).qrisType
     },
     set: ({ get, set }, val) => {
         if(guardRecoilDefaultValue(val)) return
         const data = get(qrisTransactionState)
         const newData = {
-            ...data, jenisTip: val, tip: 0
+            ...data, qrisType: val, tip: 0
         }
         set(qrisTransactionState, newData)
     }

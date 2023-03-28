@@ -10,7 +10,7 @@ type DataTransaction = {
     tip: number
 }
 
-const makeTransaction = async (data: DataTransaction) => {
+export const makeTransaction = async (data: DataTransaction) => {
     const url = main_url + '/qr/create_qris/'
     const sendData = {
         qr_code: data.qrCode,
@@ -20,9 +20,8 @@ const makeTransaction = async (data: DataTransaction) => {
             price: data.price,
             tip: data.tip,
             merchant_name: data.merchantName,
-         }
+        }
     }
-    console.log(sendData)
     try {
         const res = await axios.post(url, sendData)
         console.log(res.data)
@@ -30,7 +29,27 @@ const makeTransaction = async (data: DataTransaction) => {
     catch (error) {
         const err = error as AxiosError
         console.log(err.response?.data)
-      }
-} 
+    }
+}
 
-export default makeTransaction
+export const checkQRISCode = async (qrCode: string) => {
+    const url = main_url + '/qr/check_qr/'
+    const sendData = {
+        qr_code: qrCode
+    }
+    try {
+        const res = await axios.post(url, sendData)
+        return {
+            data: res.data
+        }
+    }
+    catch (e) {
+        const err = e as AxiosError
+        return {
+            error: {
+                ...(typeof err.response?.data === 'object' && err.response?.data),
+                statusCode: err.response?.status
+            },
+        }
+    }
+}

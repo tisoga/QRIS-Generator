@@ -6,9 +6,8 @@ import { TextDetail, TitleText } from '../components'
 import { MerchantParamList } from '../navigation/Merchant'
 import { DrawerScreenProps } from '@react-navigation/drawer'
 import { RootParams } from '../navigation/RootNavigator'
-import { useRecoilValue } from 'recoil'
-import { savedQrisState } from '../recoil/atom'
-import { convertBusinessCode } from '../functions'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
+import { qrisTransactionState, savedQrisState } from '../recoil/atom'
 
 type Props = CompositeScreenProps<
     NativeStackScreenProps<MerchantParamList, 'merchantDetail'>,
@@ -16,8 +15,13 @@ type Props = CompositeScreenProps<
 >;
 
 const QrisMerchantDetail = ({ navigation, route }: Props): JSX.Element => {
-    const { index } = route.params
-    const merchantDetail = useRecoilValue(savedQrisState)[index]
+    const { index, newMerchant } = route.params;
+    const merchantDetail = newMerchant ? newMerchant : useRecoilValue(savedQrisState)[index]
+    const setMerchant = useSetRecoilState(qrisTransactionState)
+
+    const chooseMerchant = (): void => {
+        // setMerchant(merchantDetail)
+    }
 
     return (
         <View style={{ backgroundColor: '#87ceeb', flex: 1 }}>
@@ -28,7 +32,7 @@ const QrisMerchantDetail = ({ navigation, route }: Props): JSX.Element => {
                 <TextDetail label='Lokasi Kota Merchant' value={merchantDetail.merchantCity} />
                 <View style={styles.containerGroup}>
                     <TextDetail label='Tipe Qris' value={`QRIS ${merchantDetail.qrisType.toUpperCase()}`} group />
-                    <TextDetail label='Tipe Bisnis' value={convertBusinessCode(merchantDetail.bussinessType)} group />
+                    <TextDetail label='Tipe Bisnis' value={merchantDetail.bussinessType} group />
                 </View>
                 <View style={{ gap: 10, borderBottomWidth: 1, paddingBottom: 10 }}>
                     <Text style={styles.textFiturQris}>Fitur QRIS</Text>
@@ -37,19 +41,23 @@ const QrisMerchantDetail = ({ navigation, route }: Props): JSX.Element => {
                         <BouncyCheckbox
                             fillColor='green'
                             style={{ flex: 1 }}
-                            isChecked={merchantDetail.is_tip_activated}
+                            isChecked={merchantDetail.is_tip_activated === '00000' ? false : true}
                             disabled
                         />
                     </View>
-                    <View style={styles.containerFitur}>
-                        <Text style={styles.textLabel}>Tipe Tip/Biaya Layanan</Text>
-                        <TextInput style={styles.textInput} editable={false} value={'Percentage'} />
-                    </View>
+                    {merchantDetail.is_tip_activated !== '00000' &&
+                        <View style={styles.containerFitur}>
+                            <Text style={styles.textLabel}>Tipe Tip/Biaya Layanan</Text>
+                            <TextInput style={styles.textInput} editable={false} value={'Percentage'} />
+                        </View>
+                    }
                 </View>
                 <View style={styles.containerButtons}>
-                    <Button title='Save Merchant' color={'blue'} />
                     <Button title='Use Merchant' color={'green'} />
-                    <Button title='Delete Merchant' color={'red'} />
+                    {newMerchant
+                        ?<Button title='Save Merchant' color={'blue'} />
+                        :<Button title='Delete Merchant' color={'red'} />
+                    }
                 </View>
             </View>
         </View>
