@@ -23,6 +23,7 @@ const QRScanner = ({ navigation }: Props) => {
             navigation.navigate('merchantDetail', {
                 index: 0,
                 newMerchant: {
+                    id: '',
                     acquirerName: res.data?.acquirer_name,
                     bussinessType: res.data?.bussiness_type,
                     is_tip_activated: res.data?.is_tip_activated,
@@ -56,11 +57,6 @@ const QRScanner = ({ navigation }: Props) => {
                 <Text style={styles.centerText}>
                     Silahkan Scan kode QRIS anda.
                 </Text>
-            }
-            bottomContent={
-                <TouchableOpacity onPress={() => console.log(loading)} >
-                    <Text >OK. Got it!</Text>
-                </TouchableOpacity>
             }
         />
     );

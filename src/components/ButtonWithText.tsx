@@ -17,7 +17,7 @@ type SectionProps = {
 }
 
 const ButtonWithText = (props: SectionProps): JSX.Element => {
-
+    // console.log(props.activeButton)
     const changeButtonState = (val: String):void => {
         props.changeState(val)
     }

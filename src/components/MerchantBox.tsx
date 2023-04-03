@@ -25,7 +25,7 @@ const MerchantBox = ({ merchantName, acquirer, tipeBisnis, onPress, index }: Pro
             </View>
             <View style={styles.tipeBisnisContainer}>
                 <Text style={styles.tipeBisnisTextLeft}>Tipe Bisnis : </Text>
-                <Text style={styles.tipeBisnisTextRight}>{convertBusinessCode(tipeBisnis)}</Text>
+                <Text style={styles.tipeBisnisTextRight}>{tipeBisnis}</Text>
             </View>
         </TouchableOpacity>
     )

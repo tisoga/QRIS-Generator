@@ -2,6 +2,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { ListMerchantsScreen, QrisMerchantDetailScreen, QRScannerScreen } from "../screens";
 
 type MerchantDetailProps = {
+    id: string | number[]
     qrisType: string;
     acquirerName: string;
     merchantName: string;

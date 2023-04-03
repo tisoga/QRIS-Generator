@@ -3,8 +3,8 @@ import {
     Text,
     StyleSheet
 } from 'react-native'
-import { TransactionNavigator } from "./Transaction";
-import { MerchantNavigator } from "./Merchant";
+import { TransactionNavigator, TransactionParamList } from "./Transaction";
+import { MerchantNavigator, MerchantParamList } from "./Merchant";
 import {
     createDrawerNavigator,
     DrawerContentScrollView,
@@ -13,10 +13,13 @@ import {
     DrawerContentComponentProps
 } from "@react-navigation/drawer";
 
+import {
+    NavigatorScreenParams
+} from '@react-navigation/native'
 
 export type RootParams = {
-    TransactionDrawer: undefined
-    MerchantListDrawer: undefined
+    TransactionDrawer: NavigatorScreenParams<TransactionParamList>
+    MerchantListDrawer: NavigatorScreenParams<MerchantParamList>
 }
 
 const Drawer = createDrawerNavigator<RootParams>()

@@ -8,6 +8,9 @@ import { DrawerScreenProps } from '@react-navigation/drawer'
 import { RootParams } from '../navigation/RootNavigator'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { qrisTransactionState, savedQrisState } from '../recoil/atom'
+import { deleteMerchant, saveMerchant } from '../recoil/selector'
+import uuid from 'react-native-uuid';
+import { convertTipCode } from '../functions'
 
 type Props = CompositeScreenProps<
     NativeStackScreenProps<MerchantParamList, 'merchantDetail'>,
@@ -15,12 +18,52 @@ type Props = CompositeScreenProps<
 >;
 
 const QrisMerchantDetail = ({ navigation, route }: Props): JSX.Element => {
+    const id = uuid.v4()
     const { index, newMerchant } = route.params;
     const merchantDetail = newMerchant ? newMerchant : useRecoilValue(savedQrisState)[index]
-    const setMerchant = useSetRecoilState(qrisTransactionState)
+    const jenisTip = convertTipCode(merchantDetail.is_tip_activated)
+    const setUseMerchant = useSetRecoilState(qrisTransactionState)
+    const setSaveMerchant = useSetRecoilState(saveMerchant)
+    const setDeleteMerchant = useSetRecoilState(deleteMerchant)
 
-    const chooseMerchant = (): void => {
-        // setMerchant(merchantDetail)
+    const onPressUseMerchantBtn = (): void => {
+        if (!merchantDetail.qrCode) return
+        setUseMerchant({
+            id: id,
+            jenisTip: jenisTip,
+            merchantName: merchantDetail.merchantName,
+            qrCode: merchantDetail.qrCode,
+            qrisType: merchantDetail.qrisType,
+            price: 0,
+            tip: 0
+        })
+        navigation.navigate('TransactionDrawer', {
+            screen: 'Transaction'
+        })
+    }
+
+    const onPressSaveBtn = (): void => {
+        if (!merchantDetail.qrCode) return
+        setSaveMerchant({
+            id: id,
+            qrisType: merchantDetail.qrisType,
+            jenisTip: jenisTip,
+            acquirerName: merchantDetail.acquirerName,
+            bussinessType: merchantDetail.bussinessType,
+            merchantCity: merchantDetail.merchantCity,
+            merchantName: merchantDetail.merchantName,
+            is_tip_activated: merchantDetail.is_tip_activated,
+            qrCode: merchantDetail.qrCode,
+        })
+        navigation.navigate('listMerchant')
+        console.log('success')
+    }
+
+    const onPressDeleteBtn = (): void => {
+        const id = merchantDetail.id
+        if (typeof id !== 'string') return
+        setDeleteMerchant(id)
+        navigation.goBack()
     }
 
     return (
@@ -48,15 +91,15 @@ const QrisMerchantDetail = ({ navigation, route }: Props): JSX.Element => {
                     {merchantDetail.is_tip_activated !== '00000' &&
                         <View style={styles.containerFitur}>
                             <Text style={styles.textLabel}>Tipe Tip/Biaya Layanan</Text>
-                            <TextInput style={styles.textInput} editable={false} value={'Percentage'} />
+                            <TextInput style={styles.textInput} editable={false} value={jenisTip} />
                         </View>
                     }
                 </View>
                 <View style={styles.containerButtons}>
-                    <Button title='Use Merchant' color={'green'} />
+                    <Button title='Use Merchant' color={'green'} onPress={onPressUseMerchantBtn} />
                     {newMerchant
-                        ?<Button title='Save Merchant' color={'blue'} />
-                        :<Button title='Delete Merchant' color={'red'} />
+                        ? <Button title='Save Merchant' color={'blue'} onPress={onPressSaveBtn} />
+                        : <Button title='Delete Merchant' color={'red'} onPress={onPressDeleteBtn} />
                     }
                 </View>
             </View>
