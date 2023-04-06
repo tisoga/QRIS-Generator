@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
         left: 10,
     },
     containerTransaction: {
-        width: 30,
+        width: '20%',
     }
 })
 

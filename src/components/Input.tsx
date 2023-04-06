@@ -16,6 +16,7 @@ const Input = (props: InputProps) => {
     const onChangeHandler = (val: String):void => {
         props.setter(val)
     }
+    
     return (
         <>
             <Text style={styles.labelTextInput}>{props.label}</Text>

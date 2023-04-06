@@ -17,7 +17,6 @@ export const changeTipeQris = selector({
     set: ({ get, set }, val) => {
         if (guardRecoilDefaultValue(val)) return
         const data = get(qrisTransactionState)
-        console.log(val)
         const newData = {
             ...data, qrisType: val, price: 0
         }

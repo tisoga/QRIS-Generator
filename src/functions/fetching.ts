@@ -4,10 +4,10 @@ import { main_url } from "../config/api_urls"
 type DataTransaction = {
     qrCode: string
     merchantName: string
-    tipeQris: string
+    qrisType: string
     jenisTip: string
-    price: number
-    tip: number
+    price?: number
+    tip?: number
 }
 
 export const makeTransaction = async (data: DataTransaction) => {
@@ -15,7 +15,7 @@ export const makeTransaction = async (data: DataTransaction) => {
     const sendData = {
         qr_code: data.qrCode,
         data: {
-            qris_type: data.tipeQris.toLowerCase(),
+            qris_type: data.qrisType.toLowerCase(),
             tip_type: data.jenisTip.toLowerCase(),
             price: data.price,
             tip: data.tip,
@@ -24,11 +24,11 @@ export const makeTransaction = async (data: DataTransaction) => {
     }
     try {
         const res = await axios.post(url, sendData)
-        console.log(res.data)
+        return res.data
     }
     catch (error) {
         const err = error as AxiosError
-        console.log(err.response?.data)
+        return err.response?.data
     }
 }
 

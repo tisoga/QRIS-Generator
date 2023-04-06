@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { View, Text, StyleSheet, Button, Image, TouchableOpacity } from 'react-native'
 import type { NativeStackScreenProps } from '@react-navigation/native-stack'
 import BouncyCheckbox from 'react-native-bouncy-checkbox'
@@ -19,6 +19,8 @@ type Props = CompositeScreenProps<
 >;
 
 const Transaction = ({ navigation }: Props): JSX.Element => {
+    const merchantState = useRecoilValue(qrisTransactionState)
+    const [initialMerchantName, setInitialMerchantname] = useState('')
     const tipeQrisStatic = useRecoilValue(tipeQrisStaticState)
     const jenisTipStatic = useRecoilValue(jenisTipStaticState)
     const data = useRecoilValue(qrisTransactionState)
@@ -29,15 +31,22 @@ const Transaction = ({ navigation }: Props): JSX.Element => {
     const setPrice = useSetRecoilState(changePriceQris)
     const setTip = useSetRecoilState(changeTipQris)
 
+    useEffect(() => {
+        setInitialMerchantname(merchantState.merchantName)
+    }, [])
+
     const changeCheckBoxStatus = (): void => {
-        setMerchantName('')
+        setMerchantName(initialMerchantName)
         setStatusMerchantName(!isChangeMerchantName)
     }
 
-    const generateQRCode = (): void => {
+    const generateQRCode = async () => {
+        const res = await makeTransaction(merchantState)
         navigation.navigate('QRPayment', {
-            qrCode: '00020101021126660014ID.LINKAJA.WWW011893600911002164800102152009170916480010303UME51450015ID.OR.GPNQR.WWW02150000000000000000303UME520454995802ID5903KAI6009Indonesia61051532562210117ESP1663719323KBQH53033606304',
-            merchantName: 'Super Long Merchant Name',
+            qrCode: res,
+            merchantName: merchantState.merchantName,
+            price: 1000,
+            tip: 1000
         })
         // makeTransaction(data)
     }
@@ -46,7 +55,9 @@ const Transaction = ({ navigation }: Props): JSX.Element => {
         <View style={{ backgroundColor: '#87ceeb', flex: 1 }}>
             <View style={styles.containerTitle}>
                 <DrawerMenu onPress={() => navigation.toggleDrawer()} type={'transaction'} />
-                <Text style={styles.textTitle}>Thiee Kitchen Bandung Super</Text>
+                <View style={styles.containerMerchantName}>
+                    <Text style={styles.textTitle}>{initialMerchantName}</Text>
+                </View>
             </View>
             <View style={styles.containerMain}>
                 <BouncyCheckbox
@@ -68,7 +79,7 @@ const Transaction = ({ navigation }: Props): JSX.Element => {
                         changeState={setTipTipeQris}
                         activeButton={activeButtonTip} />
                     {isChangeMerchantName &&
-                        <Input label={'Masukan Nama Merchant'} type={'default'} setter={setMerchantName} value={data.merchantName} />
+                        <Input label={'Masukan Nama Merchant'} type={'default'} setter={setMerchantName} value={merchantState.merchantName} />
                     }
                     <View style={{ marginTop: 20 }}>
                         {activeButtonTipe === 'Static' &&
@@ -106,6 +117,10 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         flexWrap: 'wrap',
         justifyContent: 'center',
+    },
+    containerMerchantName: {
+        alignSelf: 'center',
+        width: '60%'
     },
     textTitle: {
         fontSize: 30,
