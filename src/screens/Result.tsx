@@ -6,31 +6,54 @@ import {
     Button
 } from 'react-native';
 import { crossIcon, qrisNotSupportedIcon } from '../assets';
+import { CompositeScreenProps } from '@react-navigation/native';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { TransactionParamList } from '../navigation/Transaction';
+import { DrawerScreenProps } from '@react-navigation/drawer';
+import { RootParams } from '../navigation/RootNavigator';
 
-const Result = (): JSX.Element => {
+type Props = CompositeScreenProps<
+    NativeStackScreenProps<TransactionParamList, 'Result'>,
+    DrawerScreenProps<RootParams, 'TransactionDrawer'>
+>;
 
+const Result = ({ navigation, route }: Props): JSX.Element => {
+    const { errorMsg } = route.params
     const errorSelector = {
         qrisNotSupported: {
             imageSrc: qrisNotSupportedIcon,
             styleSrc: styles.qrisIcon,
             text: "QRIS Code Tidak Support, Silahkan gunakan QRIS yang lain"
         },
-        anotherError: {
+        networkError: {
             imageSrc: crossIcon,
             styleSrc: styles.crossIcon,
             text: 'Koneksi internet anda atau server sedang tidak dapat diakses, silahkan coba kembali.'
         }
     }
+
+    const onPressScanAgain = () => {
+        navigation.navigate('MerchantListDrawer', {
+            screen: 'addMerchant'
+        })
+    }
+
+    const onPressBackHome = () => {
+        navigation.navigate('Transaction')
+    }
+
     return (
         <View style={styles.container}>
             <Text style={styles.textTop}>Terjadi Kesalahan,</Text>
             <Image
-                source={errorSelector.anotherError.imageSrc}
-                style={errorSelector.anotherError.styleSrc} />
-            <Text style={styles.textBottom}>{errorSelector.anotherError.text}</Text>
+                source={errorSelector[errorMsg].imageSrc}
+                style={errorSelector[errorMsg].styleSrc} />
+            <Text style={styles.textBottom}>{errorSelector[errorMsg].text}</Text>
             <View style={styles.buttonContainer}>
-                <Button title='Scan Ulang' color={'green'} />
-                <Button title='Kembali ke Menu Utama' />
+                {errorMsg === 'qrisNotSupported' && (
+                    <Button title='Scan Ulang' color={'green'} onPress={onPressScanAgain} />
+                )}
+                <Button title='Kembali ke Menu Utama' onPress={onPressBackHome} />
             </View>
         </View>
     )

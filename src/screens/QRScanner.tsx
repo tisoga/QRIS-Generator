@@ -10,36 +10,51 @@ import QRCodeScanner from 'react-native-qrcode-scanner';
 import { checkQRISCode } from '../functions/fetching';
 import Loading from './Loading';
 import { MerchantParamList } from '../navigation/Merchant';
+import { CompositeScreenProps } from '@react-navigation/native';
+import { RootParams } from '../navigation/RootNavigator';
+import { DrawerScreenProps } from '@react-navigation/drawer';
 
-type Props = NativeStackScreenProps<MerchantParamList, 'addMerchant'>
+type Props = CompositeScreenProps<
+    NativeStackScreenProps<MerchantParamList, 'addMerchant'>,
+    DrawerScreenProps<RootParams, 'TransactionDrawer'>
+>;
 
 const QRScanner = ({ navigation }: Props) => {
     const [loading, setLoading] = useState(false)
     const onSuccess = async (e: any) => {
         setLoading(true)
         const res = await checkQRISCode(e.data)
+        console.log(res)
         if (res?.data) {
             setLoading(false)
+            const { acquirer_name, bussiness_type, is_tip_activated, merchant_city, merchant_name, qr_code, qris_type } = res.data;
             navigation.navigate('merchantDetail', {
                 index: 0,
                 newMerchant: {
                     id: '',
-                    acquirerName: res.data?.acquirer_name,
-                    bussinessType: res.data?.bussiness_type,
-                    is_tip_activated: res.data?.is_tip_activated,
-                    merchantCity: res.data?.merchant_city,
-                    merchantName: res.data?.merchant_name,
-                    qrCode: res.data?.qr_code,
-                    qrisType: res.data?.qris_type
+                    acquirerName: acquirer_name,
+                    bussinessType: bussiness_type,
+                    is_tip_activated: is_tip_activated,
+                    merchantCity: merchant_city,
+                    merchantName: merchant_name,
+                    qrCode: qr_code,
+                    qrisType: qris_type
                 }
             })
-            console.log(res.data)
+            // console.log(res.data)
         }
         else {
-            setLoading(false)
-            navigation.navigate('merchantDetail', {
-                index: 0
-            })
+            // console.log(res.error)
+            if (res.error?.detail) {
+                navigation.navigate('TransactionDrawer', {
+                    screen: 'Result', params: { errorMsg: 'qrisNotSupported' }
+                })
+            }
+            else {
+                navigation.navigate('TransactionDrawer', {
+                    screen: 'Result', params: { errorMsg: 'networkError' }
+                })
+            }
         }
     };
 

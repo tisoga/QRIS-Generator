@@ -11,6 +11,7 @@ import { TransactionParamList } from '../navigation/Transaction'
 import { CompositeScreenProps } from '@react-navigation/native'
 import { DrawerScreenProps } from '@react-navigation/drawer'
 import { RootParams } from '../navigation/RootNavigator'
+import Loading from './Loading'
 
 
 type Props = CompositeScreenProps<
@@ -20,6 +21,7 @@ type Props = CompositeScreenProps<
 
 const Transaction = ({ navigation }: Props): JSX.Element => {
     const merchantState = useRecoilValue(qrisTransactionState)
+    const [isLoading, setLoading] = useState(false)
     const [initialMerchantName, setInitialMerchantname] = useState('')
     const tipeQrisStatic = useRecoilValue(tipeQrisStaticState)
     const jenisTipStatic = useRecoilValue(jenisTipStaticState)
@@ -41,14 +43,31 @@ const Transaction = ({ navigation }: Props): JSX.Element => {
     }
 
     const generateQRCode = async () => {
+        setLoading(true)
         const res = await makeTransaction(merchantState)
-        navigation.navigate('QRPayment', {
-            qrCode: res,
-            merchantName: merchantState.merchantName,
-            price: 1000,
-            tip: 1000
-        })
+        console.log(res)
+        if (!res.error) {
+            setLoading(false)
+            navigation.navigate('QRPayment', {
+                qrCode: res.data,
+                merchantName: merchantState.merchantName,
+                price: merchantState.price,
+                tip: merchantState.tip
+            })
+        }
+        else {
+            setLoading(false)
+            navigation.navigate('Result', {
+                errorMsg: 'networkError'
+            })
+        }
         // makeTransaction(data)
+    }
+
+    if (isLoading) {
+        return (
+            <Loading textBottom='' />
+        )
     }
 
     return (

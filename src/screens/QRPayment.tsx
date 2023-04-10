@@ -19,19 +19,23 @@ const QRPayment = ({ route }: Props): JSX.Element => {
                 size={240}
             />
             <View style={{ width: '100%' }}>
-                {tip &&
-                    <View style={styles.tipContainer}>
-                        <Text style={styles.titleText}>Tip</Text>
-                        <Text style={styles.colonText}>:</Text>
-                        <Text style={styles.priceText}>Rp. 100.000</Text>
-                    </View>
+                {String(tip) !== '0' &&
+                    (
+                        <View style={styles.tipContainer}>
+                            <Text style={styles.titleText}>Tip</Text>
+                            <Text style={styles.colonText}>:</Text>
+                            <Text style={styles.priceText}>Rp. 100.000</Text>
+                        </View>
+                    )
                 }
-                {price &&
-                    <View style={styles.priceContainer}>
-                        <Text style={styles.titleText}>Price</Text>
-                        <Text style={styles.colonText}>:</Text>
-                        <Text style={styles.priceText}>Rp. 100.000</Text>
-                    </View>
+                {String(price) !== '0' &&
+                    (
+                        <View style={styles.priceContainer}>
+                            <Text style={styles.titleText}>Price</Text>
+                            <Text style={styles.colonText}>:</Text>
+                            <Text style={styles.priceText}>Rp. 100.000</Text>
+                        </View>
+                    )
                 }
             </View>
         </View>
