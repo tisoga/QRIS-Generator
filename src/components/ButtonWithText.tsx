@@ -30,10 +30,10 @@ const ButtonWithText = (props: SectionProps): JSX.Element => {
                     <TouchableOpacity
                         key={index}
                         activeOpacity={0.7}
-                        style={props.activeButton === item.buttonText ? styles.buttonMenuClicked : styles.buttonMenu}
+                        style={props.activeButton.toLowerCase() === item.buttonText.toLowerCase() ? styles.buttonMenuClicked : styles.buttonMenu}
                         onPress={() => changeButtonState(item.buttonText)}>
                         <Text
-                            style={props.activeButton === item.buttonText ? styles.textButtonClicked : styles.textButton}
+                            style={props.activeButton.toLowerCase() === item.buttonText.toLowerCase() ? styles.textButtonClicked : styles.textButton}
                         >{item.buttonText}</Text>
                     </TouchableOpacity>
                 ))}

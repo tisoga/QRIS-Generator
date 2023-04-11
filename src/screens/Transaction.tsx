@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { View, Text, StyleSheet, Button, Image, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, Button, Alert } from 'react-native'
 import type { NativeStackScreenProps } from '@react-navigation/native-stack'
 import BouncyCheckbox from 'react-native-bouncy-checkbox'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
@@ -38,14 +38,18 @@ const Transaction = ({ navigation }: Props): JSX.Element => {
     }, [])
 
     const changeCheckBoxStatus = (): void => {
+        if (!isChangeMerchantName) {
+            Alert.alert('Perhatian', 'Tidak semua merchant setelah pergantian nama dapat melakukan transaksi, jika pembayaran tidak dapat dilakukan silahkan matikan fitur ini.')
+        }
         setMerchantName(initialMerchantName)
         setStatusMerchantName(!isChangeMerchantName)
     }
 
     const generateQRCode = async () => {
+        if (!data.price && activeButtonTip === 'static') return Alert.alert('Perhatian', 'Harga Barang Harus lebih dari 0')
+        else if(data.tip && data.tip > 100 && activeButtonTip === 'Percentage') return Alert.alert('Perhatian', 'Tip Tidak boleh lebih dari 100%')
         setLoading(true)
         const res = await makeTransaction(merchantState)
-        console.log(res)
         if (!res.error) {
             setLoading(false)
             navigation.navigate('QRPayment', {
@@ -57,8 +61,8 @@ const Transaction = ({ navigation }: Props): JSX.Element => {
         }
         else {
             setLoading(false)
-            navigation.navigate('Result', {
-                errorMsg: 'networkError'
+            navigation.navigate('MerchantListDrawer', {
+                screen: 'Result', params: { errorMsg: 'networkError' }
             })
         }
         // makeTransaction(data)
@@ -105,7 +109,11 @@ const Transaction = ({ navigation }: Props): JSX.Element => {
                             <Input label={'Masukan Harga'} type={'number-pad'} setter={setPrice} value={String(data.price)} />
                         }
                         {activeButtonTip === 'Dynamic' ||
-                            <Input label={`Masukan Jumlah ${activeButtonTip === 'Percentage' ? 'Persentase ' : ''}Tip`} type={'number-pad'} setter={setTip} value={String(data.tip)} />
+                            <Input
+                                label={`Masukan Jumlah ${activeButtonTip === 'Percentage' ? 'Persentase ' : ''}Tip`}
+                                type={'number-pad'}
+                                setter={setTip}
+                                value={String(data.tip)} />
                         }
                     </View>
                 </View>

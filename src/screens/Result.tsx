@@ -6,14 +6,14 @@ import {
     Button
 } from 'react-native';
 import { crossIcon, qrisNotSupportedIcon } from '../assets';
-import { CompositeScreenProps } from '@react-navigation/native';
+import { CompositeScreenProps, CommonActions } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { TransactionParamList } from '../navigation/Transaction';
 import { DrawerScreenProps } from '@react-navigation/drawer';
 import { RootParams } from '../navigation/RootNavigator';
+import { MerchantParamList } from '../navigation/Merchant';
 
 type Props = CompositeScreenProps<
-    NativeStackScreenProps<TransactionParamList, 'Result'>,
+    NativeStackScreenProps<MerchantParamList, 'Result'>,
     DrawerScreenProps<RootParams, 'TransactionDrawer'>
 >;
 
@@ -33,13 +33,19 @@ const Result = ({ navigation, route }: Props): JSX.Element => {
     }
 
     const onPressScanAgain = () => {
-        navigation.navigate('MerchantListDrawer', {
-            screen: 'addMerchant'
-        })
+        navigation.goBack()
     }
 
     const onPressBackHome = () => {
-        navigation.navigate('Transaction')
+        navigation.dispatch(CommonActions.reset({
+            index: 0,
+            routes: [
+                { name: 'listMerchant' },
+            ],
+        }));
+        navigation.navigate('TransactionDrawer', {
+            screen: 'Transaction',
+        });
     }
 
     return (

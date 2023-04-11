@@ -44,15 +44,16 @@ const QRScanner = ({ navigation }: Props) => {
             // console.log(res.data)
         }
         else {
+            setLoading(false)
             // console.log(res.error)
             if (res.error?.detail) {
-                navigation.navigate('TransactionDrawer', {
-                    screen: 'Result', params: { errorMsg: 'qrisNotSupported' }
+                navigation.navigate('Result',{
+                    errorMsg: 'qrisNotSupported'
                 })
             }
             else {
-                navigation.navigate('TransactionDrawer', {
-                    screen: 'Result', params: { errorMsg: 'networkError' }
+                navigation.navigate('Result',{
+                    errorMsg: 'networkError'
                 })
             }
         }
