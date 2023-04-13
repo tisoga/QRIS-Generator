@@ -3,16 +3,19 @@
  */
 
 import 'react-native-gesture-handler';
-import { AppRegistry } from 'react-native';
+import React from 'react';
+import { AppRegistry, View, Text } from 'react-native';
 import { RecoilRoot } from 'recoil'
 import App from './App';
 import { name as appName } from './app.json';
 
 const Application = () => {
     return (
-        <RecoilRoot>
-            <App />
-        </RecoilRoot>
+        <React.Suspense fallback={<View><Text>Loading</Text></View>}>
+            <RecoilRoot>
+                <App />
+            </RecoilRoot>
+        </React.Suspense>
     )
 }
 

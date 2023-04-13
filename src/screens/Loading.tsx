@@ -30,12 +30,14 @@ const styles = StyleSheet.create({
         fontSize: 40,
         textAlign: 'center',
         fontWeight: 'bold',
-        marginBottom: 20
+        marginBottom: 20,
+        color: 'black'
     },
     textBottom: {
         fontSize: 30,
         textAlign: 'center',
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        color: 'black'
     }
 })
 

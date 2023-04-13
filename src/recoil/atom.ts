@@ -1,6 +1,24 @@
-import { atom } from "recoil"
+import { atom, AtomEffect, DefaultValue } from "recoil";
 import { QrisMerchant, QrisTransaction } from "./types"
+import { recoilPersist } from 'recoil-persist'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
+function persistAtom<T>(key: string): AtomEffect<T> {
+    return ({ setSelf, onSet }) => {
+        setSelf(AsyncStorage.getItem(key).then(savedValue =>
+            savedValue != null
+                ? JSON.parse(savedValue)
+                : new DefaultValue() // Abort initialization if no value was stored
+        ));
+
+        // Subscribe to state changes and persist them to localForage
+        onSet((newValue, _, isReset) => {
+            isReset
+                ? AsyncStorage.removeItem(key)
+                : AsyncStorage.setItem(key, JSON.stringify(newValue));
+        });
+    };
+}
 const tipeQRISStaticText = {
     title: 'Pilih Tipe QRIS',
     buttons:
@@ -59,5 +77,6 @@ export const qrisTransactionState = atom({
 
 export const savedQrisState = atom<QrisMerchant[]>({
     key: 'savedQrisState',
-    default: [FakeQrisMerchants]
+    default: [FakeQrisMerchants],
+    effects_UNSTABLE: [persistAtom('savedQrisKey')]
 })

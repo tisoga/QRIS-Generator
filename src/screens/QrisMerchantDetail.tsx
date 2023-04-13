@@ -56,7 +56,7 @@ const QrisMerchantDetail = ({ navigation, route }: Props): JSX.Element => {
             qrCode: merchantDetail.qrCode,
         })
         navigation.navigate('listMerchant')
-        console.log('success')
+        // console.log('success')
     }
 
     const onPressDeleteBtn = (): void => {

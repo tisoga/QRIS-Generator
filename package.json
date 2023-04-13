@@ -10,6 +10,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@react-native-async-storage/async-storage": "^1.18.1",
     "@react-navigation/drawer": "^6.6.2",
     "@react-navigation/native": "^6.1.6",
     "@react-navigation/native-stack": "^6.9.12",
@@ -27,7 +28,8 @@
     "react-native-screens": "^3.20.0",
     "react-native-svg": "^13.8.0",
     "react-native-uuid": "^2.0.1",
-    "recoil": "^0.7.6"
+    "recoil": "^0.7.6",
+    "recoil-persist": "^4.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

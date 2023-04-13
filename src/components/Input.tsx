@@ -30,6 +30,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         paddingVertical: 5,
         borderRadius: 5,
+        color: 'black'
     },
     labelTextInput: {
         color: 'black',

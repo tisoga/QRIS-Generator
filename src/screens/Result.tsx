@@ -36,13 +36,13 @@ const Result = ({ navigation, route }: Props): JSX.Element => {
         navigation.goBack()
     }
 
-    const onPressBackHome = () => {
-        navigation.dispatch(CommonActions.reset({
-            index: 0,
-            routes: [
-                { name: 'listMerchant' },
-            ],
-        }));
+    const onPressBackHome = async() => {
+        // navigation.dispatch(CommonActions.reset({
+        //     index: 0,
+        //     routes: [
+        //         { name: 'listMerchant' },
+        //     ],
+        // }));
         navigation.navigate('TransactionDrawer', {
             screen: 'Transaction',
         });
@@ -80,12 +80,14 @@ const styles = StyleSheet.create({
         fontSize: 40,
         textAlign: 'center',
         fontWeight: 'bold',
+        color: 'black'
     },
     textBottom: {
         fontSize: 30,
         textAlign: 'center',
         fontWeight: 'bold',
-        marginHorizontal: 10
+        marginHorizontal: 10,
+        color: 'black'
     },
     qrisIcon: {
         width: '100%',

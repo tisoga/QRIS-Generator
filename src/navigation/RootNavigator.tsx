@@ -58,7 +58,8 @@ const styles = StyleSheet.create({
     drawerTitleText: {
         fontSize: 25,
         fontWeight: 'bold',
-        textAlign: 'center'
+        textAlign: 'center',
+        color: 'black'
     },
     drawerContent: {
         flex: 1,
@@ -73,6 +74,8 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
     },
     copyrightText: {
-        textAlign: 'center'
+        fontSize: 14,
+        textAlign: 'center',
+        color: 'black'
     }
 })

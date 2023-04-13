@@ -47,7 +47,7 @@ const Transaction = ({ navigation }: Props): JSX.Element => {
 
     const generateQRCode = async () => {
         if (!data.price && activeButtonTip === 'static') return Alert.alert('Perhatian', 'Harga Barang Harus lebih dari 0')
-        else if(data.tip && data.tip > 100 && activeButtonTip === 'Percentage') return Alert.alert('Perhatian', 'Tip Tidak boleh lebih dari 100%')
+        else if (data.tip && data.tip > 100 && activeButtonTip === 'Percentage') return Alert.alert('Perhatian', 'Tip Tidak boleh lebih dari 100%')
         setLoading(true)
         const res = await makeTransaction(merchantState)
         if (!res.error) {
@@ -61,11 +61,11 @@ const Transaction = ({ navigation }: Props): JSX.Element => {
         }
         else {
             setLoading(false)
-            navigation.navigate('MerchantListDrawer', {
-                screen: 'Result', params: { errorMsg: 'networkError' }
+            navigation.navigate('Result',{
+                errorMsg: 'networkError'
             })
         }
-        // makeTransaction(data)
+        // makeTransaction(data)F
     }
 
     if (isLoading) {
