@@ -6,6 +6,7 @@ import {
 import type { NativeStackScreenProps } from '@react-navigation/native-stack'
 import QRCode from 'react-native-qrcode-svg'
 import { TransactionParamList } from '../navigation/Transaction'
+import { convertIdrCurrency } from '../functions'
 
 type Props = NativeStackScreenProps<TransactionParamList, "QRPayment">
 
@@ -23,8 +24,10 @@ const QRPayment = ({ route }: Props): JSX.Element => {
                     (
                         <View style={styles.tipContainer}>
                             <Text style={styles.titleText}>Tip</Text>
-                            <Text style={styles.colonText}>:</Text>
-                            <Text style={styles.priceText}>Rp. 100.000</Text>
+                            <View style={styles.colonContainer}>
+                                <Text style={styles.colonText}>:</Text>
+                            </View>
+                            <Text style={styles.priceText}>{convertIdrCurrency(Number(tip))}</Text>
                         </View>
                     )
                 }
@@ -32,8 +35,10 @@ const QRPayment = ({ route }: Props): JSX.Element => {
                     (
                         <View style={styles.priceContainer}>
                             <Text style={styles.titleText}>Price</Text>
-                            <Text style={styles.colonText}>:</Text>
-                            <Text style={styles.priceText}>Rp. 100.000</Text>
+                            <View style={styles.colonContainer}>
+                                <Text style={styles.colonText}>:</Text>
+                            </View>
+                            <Text style={styles.priceText}>{convertIdrCurrency(Number(price))}</Text>
                         </View>
                     )
                 }
@@ -53,10 +58,12 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         opacity: 0.6,
+        alignItems: 'center'
     },
     priceContainer: {
         flexDirection: 'row',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     merchantTextName: {
         fontSize: 40,
@@ -69,21 +76,28 @@ const styles = StyleSheet.create({
         fontSize: 30,
         fontWeight: 'bold',
         marginTop: 10,
-        color: 'black'
+        marginLeft: 5,
+        color: 'black',
+        minWidth: 140 // add this line
     },
     titleText: {
         fontSize: 30,
         fontWeight: 'bold',
         marginTop: 10,
         color: 'black',
-        width: 60
+        width: 80
+    },
+    colonContainer: {
+        flexDirection: 'row',
+        width: 20
     },
     colonText: {
         fontSize: 30,
         fontWeight: 'bold',
         marginTop: 10,
         color: 'black',
-        width: 10
+        alignSelf: 'center'
     }
 })
+
 export default QRPayment

@@ -24,7 +24,7 @@ const QRScanner = ({ navigation }: Props) => {
     const onSuccess = async (e: any) => {
         setLoading(true)
         const res = await checkQRISCode(e.data)
-        console.log(res)
+        // console.log(res)
         if (res?.data) {
             setLoading(false)
             const { acquirer_name, bussiness_type, is_tip_activated, merchant_city, merchant_name, qr_code, qris_type } = res.data;

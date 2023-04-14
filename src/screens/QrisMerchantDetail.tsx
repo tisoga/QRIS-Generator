@@ -1,6 +1,6 @@
 import { CompositeScreenProps } from '@react-navigation/native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
-import { View, Text, StyleSheet, TextInput, Button } from 'react-native'
+import { View, Text, StyleSheet, TextInput, Button, Alert } from 'react-native'
 import BouncyCheckbox from 'react-native-bouncy-checkbox'
 import { TextDetail, TitleText } from '../components'
 import { MerchantParamList } from '../navigation/Merchant'
@@ -59,11 +59,24 @@ const QrisMerchantDetail = ({ navigation, route }: Props): JSX.Element => {
         // console.log('success')
     }
 
+
     const onPressDeleteBtn = (): void => {
         const id = merchantDetail.id
-        if (typeof id !== 'string') return
-        setDeleteMerchant(id)
-        navigation.goBack()
+        Alert.alert('Perhatian', 'Apakah Anda Yakin untuk menghapus merchant ini', [
+            {
+                text: 'Cancel',
+                style: 'cancel'
+            },
+            {
+                text: 'Ya',
+                style: 'default',
+                onPress: () => {
+                    if (typeof id !== 'string') return
+                    navigation.goBack()
+                    setDeleteMerchant(id)
+                }
+            }
+        ])
     }
 
     return (

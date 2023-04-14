@@ -1,17 +1,19 @@
 import { atom, AtomEffect, DefaultValue } from "recoil";
 import { QrisMerchant, QrisTransaction } from "./types"
-import { recoilPersist } from 'recoil-persist'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function persistAtom<T>(key: string): AtomEffect<T> {
     return ({ setSelf, onSet }) => {
-        setSelf(AsyncStorage.getItem(key).then(savedValue =>
-            savedValue != null
-                ? JSON.parse(savedValue)
-                : new DefaultValue() // Abort initialization if no value was stored
-        ));
+        Promise.resolve()
+            .then(() => AsyncStorage.getItem(key))
+            .then(savedValue => {
+                setSelf(
+                    savedValue != null ? JSON.parse(savedValue) : new DefaultValue()
+                );
+            })
+            .catch(error => console.error(`Error loading persisted atom "${key}":`, error));
 
-        // Subscribe to state changes and persist them to localForage
+        // Subscribe to state changes and persist them to storage
         onSet((newValue, _, isReset) => {
             isReset
                 ? AsyncStorage.removeItem(key)
@@ -19,6 +21,7 @@ function persistAtom<T>(key: string): AtomEffect<T> {
         });
     };
 }
+
 const tipeQRISStaticText = {
     title: 'Pilih Tipe QRIS',
     buttons:
@@ -41,7 +44,7 @@ const jenisTipStaticText = {
 const initialQrisTransaction: QrisTransaction = {
     id: 'test',
     qrCode: '00020101021126660014ID.LINKAJA.WWW011893600911002164800102152009170916480010303UME51450015ID.OR.GPNQR.WWW02150000000000000000303UME520454995802ID5903KAI6009Indonesia61051532562210117ESP1663719323KBQH53033606304',
-    merchantName: 'Fake QRIS MERCHANT DRAGON IS READY',
+    merchantName: 'Fake QRIS MERCHANT',
     qrisType: 'Dynamic',
     jenisTip: 'Dynamic',
     price: 0,
@@ -72,7 +75,8 @@ export const jenisTipStaticState = atom({
 
 export const qrisTransactionState = atom({
     key: 'qrisTransactionState',
-    default: initialQrisTransaction
+    default: initialQrisTransaction,
+    effects_UNSTABLE: [persistAtom('qrisTransactionKey')]
 })
 
 export const savedQrisState = atom<QrisMerchant[]>({

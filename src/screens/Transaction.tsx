@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { View, Text, StyleSheet, Button, Alert } from 'react-native'
 import type { NativeStackScreenProps } from '@react-navigation/native-stack'
 import BouncyCheckbox from 'react-native-bouncy-checkbox'
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
+import { useRecoilState, useRecoilValue, useSetRecoilState, useRecoilValueLoadable } from 'recoil'
 import { ButtonWithText, DrawerMenu, Input } from '../components'
 import { makeTransaction } from '../functions/fetching'
 import { jenisTipStaticState, qrisTransactionState, tipeQrisStaticState } from '../recoil/atom'
@@ -20,55 +20,55 @@ type Props = CompositeScreenProps<
 >;
 
 const Transaction = ({ navigation }: Props): JSX.Element => {
-    const merchantState = useRecoilValue(qrisTransactionState)
-    const [isLoading, setLoading] = useState(false)
-    const [initialMerchantName, setInitialMerchantname] = useState('')
-    const tipeQrisStatic = useRecoilValue(tipeQrisStaticState)
-    const jenisTipStatic = useRecoilValue(jenisTipStaticState)
-    const data = useRecoilValue(qrisTransactionState)
-    const [activeButtonTipe, setTipeQris] = useRecoilState(changeTipeQris)
-    const [activeButtonTip, setTipTipeQris] = useRecoilState(changeTipTipeQris)
-    const [isChangeMerchantName, setStatusMerchantName] = useState<boolean>(false)
-    const setMerchantName = useSetRecoilState(changeMerchantName)
-    const setPrice = useSetRecoilState(changePriceQris)
-    const setTip = useSetRecoilState(changeTipQris)
+    const merchantState = useRecoilValueLoadable(qrisTransactionState);
+    const [isLoading, setLoading] = useState(false);
+    const [initialMerchantName, setInitialMerchantname] = useState('');
+    const tipeQrisStatic = useRecoilValue(tipeQrisStaticState);
+    const jenisTipStatic = useRecoilValue(jenisTipStaticState);
+    const [activeButtonTipe, setTipeQris] = useRecoilState(changeTipeQris);
+    const [activeButtonTip, setTipTipeQris] = useRecoilState(changeTipTipeQris);
+    const [isChangeMerchantName, setStatusMerchantName] = useState<boolean>(false);
+    const setMerchantName = useSetRecoilState(changeMerchantName);
+    const setPrice = useSetRecoilState(changePriceQris);
+    const setTip = useSetRecoilState(changeTipQris);
 
     useEffect(() => {
-        setInitialMerchantname(merchantState.merchantName)
-    }, [])
+        if (merchantState.state === 'hasValue') {
+            setInitialMerchantname(merchantState.contents.merchantName);
+        }
+    }, [merchantState]);
 
     const changeCheckBoxStatus = (): void => {
         if (!isChangeMerchantName) {
             Alert.alert('Perhatian', 'Tidak semua merchant setelah pergantian nama dapat melakukan transaksi, jika pembayaran tidak dapat dilakukan silahkan matikan fitur ini.')
         }
-        setMerchantName(initialMerchantName)
-        setStatusMerchantName(!isChangeMerchantName)
-    }
+        setMerchantName(initialMerchantName);
+        setStatusMerchantName(!isChangeMerchantName);
+    };
 
     const generateQRCode = async () => {
-        if (!data.price && activeButtonTip === 'static') return Alert.alert('Perhatian', 'Harga Barang Harus lebih dari 0')
-        else if (data.tip && data.tip > 100 && activeButtonTip === 'Percentage') return Alert.alert('Perhatian', 'Tip Tidak boleh lebih dari 100%')
-        setLoading(true)
-        const res = await makeTransaction(merchantState)
+        if (!merchantState.contents.price && activeButtonTip === 'static') return Alert.alert('Perhatian', 'Harga Barang Harus lebih dari 0')
+        else if (merchantState.contents.tip && merchantState.contents.tip > 100 && activeButtonTip === 'Percentage') return Alert.alert('Perhatian', 'Tip Tidak boleh lebih dari 100%')
+        setLoading(true);
+        const res = await makeTransaction(merchantState.contents);
         if (!res.error) {
-            setLoading(false)
+            setLoading(false);
             navigation.navigate('QRPayment', {
                 qrCode: res.data,
-                merchantName: merchantState.merchantName,
-                price: merchantState.price,
-                tip: merchantState.tip
+                merchantName: merchantState.contents.merchantName,
+                price: merchantState.contents.price,
+                tip: merchantState.contents.tip
             })
         }
         else {
-            setLoading(false)
+            setLoading(false);
             navigation.navigate('Result',{
                 errorMsg: 'networkError'
             })
         }
-        // makeTransaction(data)F
-    }
+    };
 
-    if (isLoading) {
+    if (merchantState.state === 'loading' || isLoading) {
         return (
             <Loading textBottom='' />
         )
@@ -102,18 +102,18 @@ const Transaction = ({ navigation }: Props): JSX.Element => {
                         changeState={setTipTipeQris}
                         activeButton={activeButtonTip} />
                     {isChangeMerchantName &&
-                        <Input label={'Masukan Nama Merchant'} type={'default'} setter={setMerchantName} value={merchantState.merchantName} />
+                        <Input label={'Masukan Nama Merchant'} type={'default'} setter={setMerchantName} value={merchantState.contents.merchantName} />
                     }
                     <View style={{ marginTop: 20 }}>
                         {activeButtonTipe === 'Static' &&
-                            <Input label={'Masukan Harga'} type={'number-pad'} setter={setPrice} value={String(data.price)} />
+                            <Input label={'Masukan Harga'} type={'number-pad'} setter={setPrice} value={String(merchantState.contents.price)} />
                         }
                         {activeButtonTip === 'Dynamic' ||
                             <Input
                                 label={`Masukan Jumlah ${activeButtonTip === 'Percentage' ? 'Persentase ' : ''}Tip`}
                                 type={'number-pad'}
                                 setter={setTip}
-                                value={String(data.tip)} />
+                                value={String(merchantState.contents.tip)} />
                         }
                     </View>
                 </View>

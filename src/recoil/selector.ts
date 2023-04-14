@@ -117,6 +117,7 @@ export const deleteMerchant = selector({
     },
     set: ({ get, set }, id) => {
         if (guardRecoilDefaultValue(id)) return
+        console.log('delete')
         const listMerchants = get(savedQrisState)
         const newMerchants = listMerchants.filter((item) => item.id !== id)
         set(savedQrisState, newMerchants)
