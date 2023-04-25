@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "qris_generator_3.app"
-               BlueprintName = "qris_generator_3"
-               ReferencedContainer = "container:qris_generator_3.xcodeproj">
+               BuildableName = "QRISGeneratorN2.app"
+               BlueprintName = "QRISGeneratorN2"
+               ReferencedContainer = "container:QRISGeneratorN2.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "qris_generator_3Tests.xctest"
-               BlueprintName = "qris_generator_3Tests"
-               ReferencedContainer = "container:qris_generator_3.xcodeproj">
+               BuildableName = "QRISGeneratorN2Tests.xctest"
+               BlueprintName = "QRISGeneratorN2Tests"
+               ReferencedContainer = "container:QRISGeneratorN2.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "qris_generator_3.app"
-            BlueprintName = "qris_generator_3"
-            ReferencedContainer = "container:qris_generator_3.xcodeproj">
+            BuildableName = "QRISGeneratorN2.app"
+            BlueprintName = "QRISGeneratorN2"
+            ReferencedContainer = "container:QRISGeneratorN2.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "qris_generator_3.app"
-            BlueprintName = "qris_generator_3"
-            ReferencedContainer = "container:qris_generator_3.xcodeproj">
+            BuildableName = "QRISGeneratorN2.app"
+            BlueprintName = "QRISGeneratorN2"
+            ReferencedContainer = "container:QRISGeneratorN2.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

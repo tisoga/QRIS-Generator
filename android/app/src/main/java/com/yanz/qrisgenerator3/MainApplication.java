@@ -1,4 +1,4 @@
-package com.qris_generator_3;
+package com.yanz.qrisgenerator3;
 
 import android.app.Application;
 import com.facebook.react.PackageList;

@@ -1,4 +1,4 @@
-package com.qris_generator_3;
+package com.yanz.qrisgenerator3;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
@@ -13,7 +13,7 @@ public class MainActivity extends ReactActivity {
    */
   @Override
   protected String getMainComponentName() {
-    return "qris_generator_3";
+    return "QRIS Generator N2";
   }
 
   /**

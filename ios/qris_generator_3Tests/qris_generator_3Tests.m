@@ -7,11 +7,11 @@
 #define TIMEOUT_SECONDS 600
 #define TEXT_TO_LOOK_FOR @"Welcome to React"
 
-@interface qris_generator_3Tests : XCTestCase
+@interface QRISGeneratorN2Tests : XCTestCase
 
 @end
 
-@implementation qris_generator_3Tests
+@implementation QRISGeneratorN2Tests
 
 - (BOOL)findSubviewInView:(UIView *)view matching:(BOOL (^)(UIView *view))test
 {
