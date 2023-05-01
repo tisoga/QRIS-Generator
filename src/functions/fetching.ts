@@ -16,7 +16,7 @@ interface ApiResponse {
 }
 
 export const makeTransaction = async (data: TransactionData): Promise<ApiResponse> => {
-    const url = `${main_url}/qr/create_qris/`;
+    const url = `${main_url}/qr/create_qris`;
     const sendData = {
         qr_code: data.qrCode,
         data: {
@@ -34,7 +34,7 @@ export const makeTransaction = async (data: TransactionData): Promise<ApiRespons
     }
     catch (error) {
         const err = error as AxiosError;
-
+        // console.log(err.responshnnnjjhjjhjjje?.data)
         if (err.response) {
             return {
                 error: {
@@ -50,9 +50,9 @@ export const makeTransaction = async (data: TransactionData): Promise<ApiRespons
 };
 
 export const checkQRISCode = async (qrCode: string): Promise<ApiResponse> => {
-    const url = `${main_url}/qr/check_qr/`;
+    const url = `${main_url}/qr/check_qr`;
     const sendData = { qr_code: qrCode };
-
+    // console.log(url)
     try {
         const res = await axios.post(url, sendData);
         return { data: res.data };

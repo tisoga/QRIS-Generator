@@ -27,10 +27,14 @@ const QrisMerchantDetail = ({ navigation, route }: Props): JSX.Element => {
     const setDeleteMerchant = useSetRecoilState(deleteMerchant)
 
     const onPressUseMerchantBtn = (): void => {
+        let tipType = jenisTip
         if (!merchantDetail.qrCode) return
+        if (jenisTip === 'Not Activated'){
+            tipType = 'dynamic'
+        }
         setUseMerchant({
             id: id,
-            jenisTip: jenisTip,
+            jenisTip: tipType,
             merchantName: merchantDetail.merchantName,
             qrCode: merchantDetail.qrCode,
             qrisType: merchantDetail.qrisType,
@@ -43,11 +47,15 @@ const QrisMerchantDetail = ({ navigation, route }: Props): JSX.Element => {
     }
 
     const onPressSaveBtn = (): void => {
+        let tipType = jenisTip
         if (!merchantDetail.qrCode) return
+        if (jenisTip === 'Not Activated'){
+            tipType = 'dynamic'
+        }
         setSaveMerchant({
             id: id,
             qrisType: merchantDetail.qrisType,
-            jenisTip: jenisTip,
+            jenisTip: tipType,
             acquirerName: merchantDetail.acquirerName,
             bussinessType: merchantDetail.bussinessType,
             merchantCity: merchantDetail.merchantCity,
